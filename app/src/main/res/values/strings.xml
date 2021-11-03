@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">NintexFlights</string>
 
+    <!--Search-->
     <string name="plan_your_journey">Plan your\njourney</string>
     <string name="round_trip">Round Trip</string>
     <string name="one_way">One-Way</string>
@@ -18,5 +19,12 @@
     <string name="search_flights">Search Flights</string>
     <string name="default_date">DD/MM/YY</string>
 
+    <!--Search Results-->
+    <string name="flights">Flights</string>
+    <string name="flights_found">flights available from</string>
+    <string name="searching_for_flights">Searching for flights</string>
+    <string name="date">Date</string>
+    <string name="flight_no">Flight No</string>
+    <string name="ticket_price">Ticket Price</string>
 
 </resources>
