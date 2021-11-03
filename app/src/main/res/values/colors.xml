@@ -10,6 +10,7 @@
     <color name="light_grey">#F5F6F8</color>
     <color name="normal_text">#363636</color>
     <color name="subtitle_text">#ACACAC</color>
+    <color name="subtitle_text_2">#CCCCCC</color>
 
 
 </resources>

@@ -23,8 +23,9 @@
     <string name="flights">Flights</string>
     <string name="flights_found">flights available from</string>
     <string name="searching_for_flights">Searching for flights</string>
-    <string name="date">Date</string>
+    <string name="duration">Duration</string>
     <string name="flight_no">Flight No</string>
     <string name="ticket_price">Ticket Price</string>
+    <string name="plan_your_journey_tablet">Plan your\njourney and click search to find flights</string>
 
 </resources>

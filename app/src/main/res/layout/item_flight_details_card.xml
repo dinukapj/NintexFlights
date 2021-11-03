@@ -4,6 +4,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
     android:background="@drawable/card_curved"
+    android:clickable="true"
+    android:focusable="true"
     android:orientation="vertical"
     android:paddingStart="5dp"
     android:paddingTop="20dp"
@@ -107,7 +109,7 @@
                 android:layout_gravity="start"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="0dp"
-                android:text="@string/date"
+                android:text="@string/duration"
                 android:textAllCaps="true"
                 android:textColor="@color/subtitle_text"
                 android:textSize="12sp" />

@@ -5,15 +5,19 @@
       <map>
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/card_curved.xml" value="0.40260416666666665" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/card_curved_accent_top.xml" value="0.40260416666666665" />
+        <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/card_curved_lightgrey_top.xml" value="0.301953125" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/card_curved_theme_top.xml" value="0.40260416666666665" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/card_curved_top.xml" value="0.40260416666666665" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/curved_button_theme.xml" value="0.40260416666666665" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/curved_button_theme_disabled.xml" value="0.40260416666666665" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/curved_button_theme_idle.xml" value="0.40260416666666665" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/drawable/curved_button_theme_pressed.xml" value="0.40260416666666665" />
+        <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout-land/activity_search.xml" value="0.1" />
+        <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout-land/activity_tablet_search.xml" value="0.1" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout/activity_main.xml" value="0.38645833333333335" />
-        <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout/activity_search.xml" value="0.1" />
+        <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout/activity_search.xml" value="0.264" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout/activity_search_results.xml" value="0.38645833333333335" />
+        <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout/activity_tablet_search.xml" value="0.4" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/layout/item_flight_details_card.xml" value="0.38645833333333335" />
         <entry key="..\:/App360/Projects/NintexFlights/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.40260416666666665" />
       </map>

@@ -1,30 +1,46 @@
 package com.nintex.nintexflights.activities
 
 import android.app.DatePickerDialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nintex.nintexflights.R
+import com.nintex.nintexflights.adapters.FlightsRVAdapter
+import com.nintex.nintexflights.api.APIServices
+import com.nintex.nintexflights.api.RetrofitService
+import com.nintex.nintexflights.models.FlightResult
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
-import javax.xml.datatype.DatatypeConstants.MONTHS
+import kotlin.concurrent.schedule
 
-class SearchActivity : AppCompatActivity() {
+class TabletSearchActivity : AppCompatActivity() {
 
-    lateinit var tvFromCode: TextView;
-    lateinit var tvFromName: TextView;
-    lateinit var tvToCode: TextView;
-    lateinit var tvToName: TextView;
-    lateinit var tvDepartDate: TextView;
-    lateinit var tvReturnDate: TextView;
-    lateinit var tvWeight: TextView;
-    lateinit var tvSeats: TextView;
-    lateinit var llSeats: LinearLayout;
-    lateinit var llWeight: LinearLayout;
-    lateinit var btnSearch: AppCompatButton;
+    //search side bar
+    lateinit var tvFromCode: TextView
+    lateinit var tvFromName: TextView
+    lateinit var tvToCode: TextView
+    lateinit var tvToName: TextView
+    lateinit var tvDepartDate: TextView
+    lateinit var tvReturnDate: TextView
+    lateinit var tvWeight: TextView
+    lateinit var tvSeats: TextView
+    lateinit var llSeats: LinearLayout
+    lateinit var llWeight: LinearLayout
+    lateinit var btnSearch: AppCompatButton
+    lateinit var rlPlaceholder: RelativeLayout
+    lateinit var rlResults: RelativeLayout
+    lateinit var tvResultCount: TextView
+
+    //search results
+    private lateinit var rlProgressView: RelativeLayout
+    private lateinit var rvFlights: RecyclerView
 
     //cache current search
     private lateinit var originName: String
@@ -38,7 +54,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search)
+        setContentView(R.layout.activity_tablet_search)
 
         supportActionBar?.hide()
 
@@ -54,15 +70,21 @@ class SearchActivity : AppCompatActivity() {
         llSeats = findViewById(R.id.llSeats)
         llWeight = findViewById(R.id.llWeight)
         btnSearch = findViewById(R.id.btnSearch)
+        tvResultCount = findViewById(R.id.tvResultCount)
 
-        setupEvents();
+        rlProgressView = findViewById(R.id.rlProgressView)
+        rvFlights = findViewById(R.id.rvFlights)
+        rlPlaceholder = findViewById(R.id.rlPlaceholder)
+        rlResults = findViewById(R.id.rlResults)
 
         setDefaults();
+
+        setupEvents()
     }
 
     /*
-   * Setup default values for the selections
-   * */
+    * Setup default values for the selections
+    * */
     private fun setDefaults() {
         originCode = codeList[0]
         originName = nameList[0]
@@ -97,12 +119,7 @@ class SearchActivity : AppCompatActivity() {
             showSeatsSelector()
         }
         btnSearch.setOnClickListener {
-            var intent = Intent(this, SearchResultsActivity::class.java)
-            intent.putExtra("originCode", originCode)
-            intent.putExtra("originName", originName)
-            intent.putExtra("destinationCode", destinationCode)
-            intent.putExtra("destinationName", destinationName)
-            startActivity(intent)
+            getFlights()
         }
     }
 
@@ -209,4 +226,48 @@ class SearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
+    private fun getFlights() {
+        rlPlaceholder.visibility = View.GONE
+        rlProgressView.visibility = View.VISIBLE
+
+        //call api to get flight response
+        val request = RetrofitService.buildService(APIServices::class.java)
+        val call = request.getFlights(originCode, destinationCode, "", "")
+        call.enqueue(object : Callback<MutableList<FlightResult>> {
+            override fun onResponse(
+                call: Call<MutableList<FlightResult>>,
+                response: Response<MutableList<FlightResult>>
+            ) {
+                if (response.isSuccessful) {
+                    val results: MutableList<FlightResult> = response.body()!!
+
+                    //set result count
+                    tvResultCount.text =
+                        "" + results.size + " " + getString(R.string.flights_found) + " " + originName + " to " + destinationName
+
+                    setupRecyclerView(results);
+                }
+            }
+
+            override fun onFailure(call: Call<MutableList<FlightResult>>, t: Throwable) {
+                Toast.makeText(this@TabletSearchActivity, "${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun setupRecyclerView(data: MutableList<FlightResult>) {
+        rvFlights.layoutManager = LinearLayoutManager(this)
+        val adapter = FlightsRVAdapter(data)
+        rvFlights.adapter = adapter
+
+        //hide progress view after a small delay to avoid any abrupt loading
+        val interval: Long = 1500
+        Timer().schedule(interval) {
+            runOnUiThread {
+                rlProgressView.visibility = View.GONE
+                rlResults.visibility = View.VISIBLE
+            }
+        }
+
+    }
 }
