@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">NintexFlights</string>
+
+    <string name="plan_your_journey">Plan your\njourney</string>
+    <string name="round_trip">Round Trip</string>
+    <string name="one_way">One-Way</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="depart">Depart</string>
+    <string name="return_">Return</string>
+    <string name="passenger_luggage">Passenger &amp; Luggage</string>
+    <string name="seat">Seats</string>
+    <string name="kgs">KGs</string>
+    <string name="class_">Class</string>
+    <string name="economy">Economy</string>
+    <string name="business">Business</string>
+    <string name="first_class">First Class</string>
+    <string name="search_flights">Search Flights</string>
+    <string name="default_date">DD/MM/YY</string>
+
+
+</resources>
