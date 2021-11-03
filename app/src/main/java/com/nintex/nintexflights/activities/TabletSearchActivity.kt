@@ -1,11 +1,11 @@
 package com.nintex.nintexflights.activities
 
 import android.app.DatePickerDialog
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +17,7 @@ import com.nintex.nintexflights.models.FlightResult
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.concurrent.schedule
 
@@ -47,6 +48,8 @@ class TabletSearchActivity : AppCompatActivity() {
     private lateinit var destinationName: String
     private lateinit var originCode: String
     private lateinit var destinationCode: String
+    private lateinit var departureDate: String
+    private lateinit var returnDate: String
 
     //locations data
     val codeList = arrayOf("MLB", "SYD", "CMB", "AUH", "ADL")
@@ -143,6 +146,9 @@ class TabletSearchActivity : AppCompatActivity() {
                 tvToCode.text = destinationCode
                 tvToName.text = destinationName
             }
+
+            validateParameters()
+
             dialogInterface.dismiss()
         }
         // Set the neutral/cancel button click listener
@@ -168,11 +174,20 @@ class TabletSearchActivity : AppCompatActivity() {
             this, R.style.DialogTheme,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 var selectedDate = "$dayOfMonth/$monthOfYear/$year"
+
+                val simpleDateFormat =
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+                var formattedDate = simpleDateFormat.format(Date(selectedDate))
+
                 if (departure) {
+                    departureDate = formattedDate
                     tvDepartDate.setText(selectedDate)
                 } else {
+                    returnDate = formattedDate
                     tvReturnDate.setText(selectedDate)
                 }
+
+                validateParameters()
             },
             year,
             month,
@@ -226,13 +241,21 @@ class TabletSearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
+    /*
+    * Checks if the origin, destination and the dates are selected before searching
+    * */
+    private fun validateParameters() {
+        btnSearch.isEnabled =
+            ::originCode.isInitialized && ::destinationCode.isInitialized && ::departureDate.isInitialized && ::returnDate.isInitialized
+    }
+
     private fun getFlights() {
         rlPlaceholder.visibility = View.GONE
         rlProgressView.visibility = View.VISIBLE
 
         //call api to get flight response
         val request = RetrofitService.buildService(APIServices::class.java)
-        val call = request.getFlights(originCode, destinationCode, "", "")
+        val call = request.getFlights(originCode, destinationCode, departureDate, returnDate)
         call.enqueue(object : Callback<MutableList<FlightResult>> {
             override fun onResponse(
                 call: Call<MutableList<FlightResult>>,
@@ -257,7 +280,8 @@ class TabletSearchActivity : AppCompatActivity() {
 
     private fun setupRecyclerView(data: MutableList<FlightResult>) {
         rvFlights.layoutManager = LinearLayoutManager(this)
-        val adapter = FlightsRVAdapter(data, originCode, originName, destinationCode, destinationName)
+        val adapter =
+            FlightsRVAdapter(data, originCode, originName, destinationCode, destinationName)
         rvFlights.adapter = adapter
 
         //hide progress view after a small delay to avoid any abrupt loading

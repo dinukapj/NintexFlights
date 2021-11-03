@@ -5,12 +5,12 @@
 
     <color name="dark_blue">#00386B</color>
     <color name="theme_blue">#0084FF</color>
-    <color name="theme_blue_disabled">#96C8F6</color>
+    <color name="theme_blue_disabled">#74B8F6</color>
     <color name="accent">#006ED4</color>
     <color name="light_grey">#F5F6F8</color>
     <color name="normal_text">#363636</color>
     <color name="subtitle_text">#ACACAC</color>
-    <color name="subtitle_text_2">#CCCCCC</color>
+    <color name="subtitle_text_2">#ACACAC</color>
 
 
 </resources>

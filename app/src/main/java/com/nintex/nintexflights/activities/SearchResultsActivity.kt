@@ -32,6 +32,8 @@ class SearchResultsActivity : AppCompatActivity() {
     private lateinit var destinationName: String
     private lateinit var originCode: String
     private lateinit var destinationCode: String
+    private lateinit var departureDate: String
+    private lateinit var returnDate: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,8 @@ class SearchResultsActivity : AppCompatActivity() {
         destinationName = intent.getStringExtra("destinationName").toString()
         originCode = intent.getStringExtra("originCode").toString()
         destinationCode = intent.getStringExtra("destinationCode").toString()
+        departureDate = intent.getStringExtra("departureDate").toString()
+        returnDate = intent.getStringExtra("returnDate").toString()
 
         ivBack = findViewById(R.id.ivBack)
         rlProgressView = findViewById(R.id.rlProgressView)
@@ -68,7 +72,7 @@ class SearchResultsActivity : AppCompatActivity() {
         rlProgressView.visibility = View.VISIBLE
         //call api to get flight response
         val request = RetrofitService.buildService(APIServices::class.java)
-        val call = request.getFlights("", "", "", "")
+        val call = request.getFlights(originCode, destinationCode, departureDate, returnDate)
         call.enqueue(object : Callback<MutableList<FlightResult>> {
             override fun onResponse(
                 call: Call<MutableList<FlightResult>>,

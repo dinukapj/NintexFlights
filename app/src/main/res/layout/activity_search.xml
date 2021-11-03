@@ -425,11 +425,12 @@
                 android:id="@+id/btnSearch"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginBottom="16dp"
+                android:enabled="false"
                 android:background="@drawable/curved_button_theme"
-                android:layout_alignParentBottom="true"
                 android:text="@string/search_flights"
                 android:textAllCaps="false"
                 android:textColor="@color/white" />

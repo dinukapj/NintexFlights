@@ -388,6 +388,7 @@
             android:background="@drawable/curved_button_theme"
             android:text="@string/search_flights"
             android:textAllCaps="false"
+            android:enabled="false"
             android:textColor="@color/white" />
 
         <ImageView

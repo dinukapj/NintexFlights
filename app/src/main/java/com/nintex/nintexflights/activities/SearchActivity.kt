@@ -2,15 +2,15 @@ package com.nintex.nintexflights.activities
 
 import android.app.DatePickerDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.nintex.nintexflights.R
+import java.text.SimpleDateFormat
 import java.util.*
-import javax.xml.datatype.DatatypeConstants.MONTHS
 
 class SearchActivity : AppCompatActivity() {
 
@@ -31,6 +31,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var destinationName: String
     private lateinit var originCode: String
     private lateinit var destinationCode: String
+    private lateinit var departureDate: String
+    private lateinit var returnDate: String
 
     //locations data
     val codeList = arrayOf("MLB", "SYD", "CMB", "AUH", "ADL")
@@ -102,6 +104,8 @@ class SearchActivity : AppCompatActivity() {
             intent.putExtra("originName", originName)
             intent.putExtra("destinationCode", destinationCode)
             intent.putExtra("destinationName", destinationName)
+            intent.putExtra("departureDate", departureDate)
+            intent.putExtra("returnDate", returnDate)
             startActivity(intent)
         }
     }
@@ -126,6 +130,9 @@ class SearchActivity : AppCompatActivity() {
                 tvToCode.text = destinationCode
                 tvToName.text = destinationName
             }
+
+            validateParameters()
+
             dialogInterface.dismiss()
         }
         // Set the neutral/cancel button click listener
@@ -151,11 +158,20 @@ class SearchActivity : AppCompatActivity() {
             this, R.style.DialogTheme,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 var selectedDate = "$dayOfMonth/$monthOfYear/$year"
+
+                val simpleDateFormat =
+                    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX", Locale.getDefault())
+                var formattedDate = simpleDateFormat.format(Date(selectedDate))
+
                 if (departure) {
+                    departureDate = formattedDate
                     tvDepartDate.setText(selectedDate)
                 } else {
+                    returnDate = formattedDate
                     tvReturnDate.setText(selectedDate)
                 }
+
+                validateParameters()
             },
             year,
             month,
@@ -209,4 +225,11 @@ class SearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
+    /*
+        * Checks if the origin, destination and the dates are selected before searching
+        * */
+    private fun validateParameters() {
+        btnSearch.isEnabled =
+            ::originCode.isInitialized && ::destinationCode.isInitialized && ::departureDate.isInitialized && ::returnDate.isInitialized
+    }
 }
