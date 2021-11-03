@@ -10,7 +10,13 @@ import com.bumptech.glide.Glide
 import com.nintex.nintexflights.R
 import com.nintex.nintexflights.models.FlightResult
 
-class FlightsRVAdapter(private val mList: List<FlightResult>) : RecyclerView.Adapter<FlightsRVAdapter.ViewHolder>() {
+class FlightsRVAdapter(
+    private val mList: List<FlightResult>,
+    private val originCode: String,
+    private val originName: String,
+    private val destinationCode: String,
+    private val destinationName: String
+) : RecyclerView.Adapter<FlightsRVAdapter.ViewHolder>() {
 
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,7 +30,7 @@ class FlightsRVAdapter(private val mList: List<FlightResult>) : RecyclerView.Ada
 
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(mList[position])
+        return holder.bind(mList[position], originCode, originName, destinationCode, destinationName)
     }
 
     // return the number of the items in the list
@@ -44,12 +50,22 @@ class FlightsRVAdapter(private val mList: List<FlightResult>) : RecyclerView.Ada
         val tvPrice: TextView = itemView.findViewById(R.id.tvPrice)
         val tvAirline: TextView = itemView.findViewById(R.id.tvAirline)
 
-        fun bind(flight: FlightResult) {
+        fun bind(
+            flight: FlightResult,
+            originCode: String,
+            originName: String,
+            destinationCode: String,
+            destinationName: String
+        ) {
             Glide.with(itemView.context).load(flight.AirlineLogoAddress).into(ivAirlineLogo)
             tvDuration.text = flight.InboundFlightsDuration
             tvAirline.text = flight.AirlineName
             tvPrice.text = "$" + flight.TotalAmount
             tvFlight.text = "UL324"
+            tvFromCode.text = originCode
+            tvFromName.text = originName
+            tvToCode.text = destinationCode
+            tvToName.text = destinationName
         }
     }
 }

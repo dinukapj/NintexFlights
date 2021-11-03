@@ -94,7 +94,13 @@ class SearchResultsActivity : AppCompatActivity() {
 
     private fun setupRecyclerView(data: MutableList<FlightResult>) {
         rvFlights.layoutManager = LinearLayoutManager(this)
-        val adapter = FlightsRVAdapter(data)
+        val adapter = FlightsRVAdapter(
+            data,
+            originCode,
+            destinationCode,
+            destinationCode,
+            destinationName
+        )
         rvFlights.adapter = adapter
 
         //hide progress view after a small delay to avoid any abrupt loading
