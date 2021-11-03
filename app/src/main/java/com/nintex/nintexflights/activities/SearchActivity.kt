@@ -32,6 +32,7 @@ class SearchActivity : AppCompatActivity() {
 
         actionBar?.hide();
 
+        //Bind UI elements
         tvFromCode = findViewById(R.id.tvFromCode)
         tvFromName = findViewById(R.id.tvFromName)
         tvToCode = findViewById(R.id.tvToCode)
@@ -44,10 +45,13 @@ class SearchActivity : AppCompatActivity() {
         llWeight = findViewById(R.id.llWeight)
         btnSearch = findViewById(R.id.btnSearch)
 
-        setEvents();
+        setupEvents();
     }
 
-    private fun setEvents() {
+    /*
+    * Setup click events for UI elements
+    * */
+    private fun setupEvents() {
         tvFromCode.setOnClickListener {
             showLocationSelector(true)
         }
@@ -75,6 +79,9 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
+    /*
+    * Show a location selection dialog which takes in a boolean parameter that indicates if this dialog is targeting the user's origin or destination
+    * */
     private fun showLocationSelector(origin: Boolean) {
         val codeList = arrayOf("MLB", "SYD", "CMB", "AUH", "ADL")
         val nameList = arrayOf("Melbourne", "Sydney", "Colombo", "Abu Dhabi", "Adelaide")
@@ -101,7 +108,10 @@ class SearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
-    private fun showDatePicker(origin: Boolean) {
+    /*
+    * Show a date picker dialog which takes in a boolean parameter that indicates if this dialog is targeting the user's departure or return date
+    * */
+    private fun showDatePicker(departure: Boolean) {
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -111,7 +121,7 @@ class SearchActivity : AppCompatActivity() {
             this, R.style.DialogTheme,
             DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                 var selectedDate = "$dayOfMonth/$monthOfYear/$year"
-                if (origin) {
+                if (departure) {
                     tvDepartDate.setText(selectedDate)
                 } else {
                     tvReturnDate.setText(selectedDate)
@@ -125,6 +135,9 @@ class SearchActivity : AppCompatActivity() {
         dpd.show()
     }
 
+    /*
+    * Show a luggage allowance selection dialog
+    * */
     private fun showWeightSelector() {
         val list = arrayOf("20kg", "60kg", "100kg")
 
@@ -144,6 +157,9 @@ class SearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
+    /*
+    * Show a passenger count selection dialog
+    * */
     private fun showSeatsSelector() {
         val list = arrayOf("1", "2", "3", "4", "5+")
 

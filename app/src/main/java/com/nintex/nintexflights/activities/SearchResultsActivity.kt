@@ -10,5 +10,14 @@ class SearchResultsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_search_results)
 
         actionBar?.hide();
+
+        setupEvents();
+    }
+
+    /*
+    * Setup click events for UI elements
+    * */
+    private fun setupEvents() {
+
     }
 }
