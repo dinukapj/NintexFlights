@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.nintex.nintexflights.R
 import com.nintex.nintexflights.models.FlightResult
 
@@ -23,15 +24,7 @@ class FlightsRVAdapter(private val mList: List<FlightResult>) : RecyclerView.Ada
 
     // binds the list items to a view
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
-        val ItemsViewModel = mList[position]
-
-        // sets the image to the imageview from our itemHolder class
-        //holder.ivAirlineLogo.setImageResource(ItemsViewModel.)
-
-        // sets the text to the textview from our itemHolder class
-        //holder.tvPrice.text = ItemsViewModel.text
-
+        return holder.bind(mList[position])
     }
 
     // return the number of the items in the list
@@ -42,12 +35,21 @@ class FlightsRVAdapter(private val mList: List<FlightResult>) : RecyclerView.Ada
     // Holds the views for adding it to image and text
     class ViewHolder(ItemView: View) : RecyclerView.ViewHolder(ItemView) {
         val ivAirlineLogo: ImageView = itemView.findViewById(R.id.ivAirlineLogo)
-        val tvDate: TextView = itemView.findViewById(R.id.tvDate)
+        val tvDuration: TextView = itemView.findViewById(R.id.tvDuration)
         val tvFromCode: TextView = itemView.findViewById(R.id.tvFromCode)
         val tvFromName: TextView = itemView.findViewById(R.id.tvFromName)
         val tvToCode: TextView = itemView.findViewById(R.id.tvToCode)
         val tvToName: TextView = itemView.findViewById(R.id.tvToName)
         val tvFlight: TextView = itemView.findViewById(R.id.tvFlight)
         val tvPrice: TextView = itemView.findViewById(R.id.tvPrice)
+        val tvAirline: TextView = itemView.findViewById(R.id.tvAirline)
+
+        fun bind(flight: FlightResult) {
+            Glide.with(itemView.context).load(flight.AirlineLogoAddress).into(ivAirlineLogo)
+            tvDuration.text = flight.InboundFlightsDuration
+            tvAirline.text = flight.AirlineName
+            tvPrice.text = "$" + flight.TotalAmount
+            tvFlight.text = "UL324"
+        }
     }
 }
