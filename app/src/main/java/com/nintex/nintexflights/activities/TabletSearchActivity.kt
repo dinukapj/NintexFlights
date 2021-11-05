@@ -1,6 +1,7 @@
 package com.nintex.nintexflights.activities
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -13,6 +14,7 @@ import com.nintex.nintexflights.R
 import com.nintex.nintexflights.adapters.FlightsRVAdapter
 import com.nintex.nintexflights.api.APIServices
 import com.nintex.nintexflights.api.RetrofitService
+import com.nintex.nintexflights.helpers.FlightSearchUtil
 import com.nintex.nintexflights.models.FlightResult
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,12 +46,12 @@ class TabletSearchActivity : AppCompatActivity() {
     private lateinit var rvFlights: RecyclerView
 
     //cache current search
-    private lateinit var originName: String
-    private lateinit var destinationName: String
-    private lateinit var originCode: String
-    private lateinit var destinationCode: String
-    private lateinit var departureDate: String
-    private lateinit var returnDate: String
+    private var originName: String = ""
+    private var destinationName: String = ""
+    private var originCode: String = ""
+    private var destinationCode: String = ""
+    private var departureDate: String = ""
+    private var returnDate: String = ""
 
     //locations data
     val codeList = arrayOf("MLB", "SYD", "CMB", "AUH", "ADL")
@@ -122,7 +124,17 @@ class TabletSearchActivity : AppCompatActivity() {
             showSeatsSelector()
         }
         btnSearch.setOnClickListener {
-            getFlights()
+            if (FlightSearchUtil.isSearchValid(
+                    originCode,
+                    originName,
+                    departureDate,
+                    returnDate
+                )
+            ) {
+                getFlights()
+            } else {
+                Toast.makeText(this, "Please complete all the fields", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -241,12 +253,13 @@ class TabletSearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
-    /*
-    * Checks if the origin, destination and the dates are selected before searching
-    * */
-    private fun validateParameters() {
-        btnSearch.isEnabled =
-            ::originCode.isInitialized && ::destinationCode.isInitialized && ::departureDate.isInitialized && ::returnDate.isInitialized
+    fun validateParameters() {
+        btnSearch.isEnabled = FlightSearchUtil.shouldEnableSearchButton(
+            originCode,
+            destinationCode,
+            departureDate,
+            returnDate
+        )
     }
 
     private fun getFlights() {
