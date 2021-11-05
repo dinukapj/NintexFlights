@@ -3,12 +3,15 @@ package com.nintex.nintexflights.activities
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import com.nintex.nintexflights.R
+import com.nintex.nintexflights.helpers.FlightSearchUtil
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -27,12 +30,12 @@ class SearchActivity : AppCompatActivity() {
     lateinit var btnSearch: AppCompatButton;
 
     //cache current search
-    private lateinit var originName: String
-    private lateinit var destinationName: String
-    private lateinit var originCode: String
-    private lateinit var destinationCode: String
-    private lateinit var departureDate: String
-    private lateinit var returnDate: String
+    private var originName: String = ""
+    private var destinationName: String = ""
+    private var originCode: String = ""
+    private var destinationCode: String = ""
+    private var departureDate: String = ""
+    private var returnDate: String = ""
 
     //locations data
     val codeList = arrayOf("MLB", "SYD", "CMB", "AUH", "ADL")
@@ -99,14 +102,25 @@ class SearchActivity : AppCompatActivity() {
             showSeatsSelector()
         }
         btnSearch.setOnClickListener {
-            var intent = Intent(this, SearchResultsActivity::class.java)
-            intent.putExtra("originCode", originCode)
-            intent.putExtra("originName", originName)
-            intent.putExtra("destinationCode", destinationCode)
-            intent.putExtra("destinationName", destinationName)
-            intent.putExtra("departureDate", departureDate)
-            intent.putExtra("returnDate", returnDate)
-            startActivity(intent)
+
+            if (FlightSearchUtil.isSearchValid(
+                    originCode,
+                    originName,
+                    departureDate,
+                    returnDate
+                )
+            ) {
+                var intent = Intent(this, SearchResultsActivity::class.java)
+                intent.putExtra("originCode", originCode)
+                intent.putExtra("originName", originName)
+                intent.putExtra("destinationCode", destinationCode)
+                intent.putExtra("destinationName", destinationName)
+                intent.putExtra("departureDate", departureDate)
+                intent.putExtra("returnDate", returnDate)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "Please complete all the fields", Toast.LENGTH_LONG).show()
+            }
         }
     }
 
@@ -225,11 +239,12 @@ class SearchActivity : AppCompatActivity() {
         mDialog.show()
     }
 
-    /*
-        * Checks if the origin, destination and the dates are selected before searching
-        * */
-    private fun validateParameters() {
-        btnSearch.isEnabled =
-            ::originCode.isInitialized && ::destinationCode.isInitialized && ::departureDate.isInitialized && ::returnDate.isInitialized
+    fun validateParameters() {
+        btnSearch.isEnabled = FlightSearchUtil.shouldEnableSearchButton(
+            originCode,
+            destinationCode,
+            departureDate,
+            returnDate
+        )
     }
 }
